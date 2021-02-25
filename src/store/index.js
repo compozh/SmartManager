@@ -7,21 +7,20 @@ import auth from './auth'
 import folders from './folders'
 import tasks from './tasks'
 import cases from './cases'
+import comments from './comments'
 import attachments from './attachments'
 import processes from './processes'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
   modules: {
     app,
     auth,
     folders,
     tasks,
     cases,
+    comments,
     attachments,
     processes
   },

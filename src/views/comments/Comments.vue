@@ -64,6 +64,7 @@ export default {
     OutlinedBtn,
     CommentsLog
   },
+
   data: () => ({
     comment: null,
     loading: false,
@@ -72,17 +73,18 @@ export default {
       suppressScrollX: true
     }
   }),
+
   computed: {
     comments () {
-      return this.task.comments || this.caseItem.comments || []
+      return this.$store.getters.comments || []
     }
   },
+
   methods: {
     async sendMsg () {
       if (this.comment) {
         this.loading = true
-        const action = this.type === 'CASE' ? 'addCaseComment' : 'addTaskComment'
-        await this.$store.dispatch(action, {
+        await this.$store.dispatch('addComment', {
           comment: this.comment,
           params: this.params
         })

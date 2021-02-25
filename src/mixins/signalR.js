@@ -33,8 +33,9 @@ export default {
         }
 
         if (message.MODE === 'AddComment') {
-          // Re-reading tasks to view new tasks
-          // TODO: Добавить перечитку комментариев через вызов отдельного экшена
+          // Re-reading comments
+          // Action needs additional params (type & id)
+          // this.$store.dispatch('getComments')
         }
 
         if (message.MODE === 'TASK_SUBTASKS_CHANGED') {

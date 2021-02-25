@@ -41,6 +41,7 @@ export default {
       result.success = !!taskDetails
       commit('SET_TASK_DETAILS', { [taskId]: taskDetails })
       commit('SET_ATTACHMENTS', taskDetails.originals)
+      commit('SET_COMMENTS', taskDetails.comments)
     } catch (e) {
       console.log(e.message)
       commit('SET_NOTIFY', {
@@ -52,28 +53,6 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'task')
     }
     return result
-  },
-  async addTaskComment ({ dispatch, commit }, { comment, params }) {
-    const paramsJson = JSON.stringify(params)
-    try {
-      const response = await api.addCommentToGql(comment, paramsJson)
-      const result = response.data.smtasksMutation.addComment
-      if (result.success) {
-        await dispatch('getTaskDetails', { taskId: params.id })
-      } else {
-        commit('SET_NOTIFY', {
-          text: i18n.t('notify.commentAddFail'),
-          color: 'error'
-        })
-      }
-      return result
-    } catch (e) {
-      console.log(e.message)
-      commit('SET_NOTIFY', {
-        text: i18n.t('notify.commentAddError'),
-        color: 'error'
-      })
-    }
   },
   async changeTaskStatus ({ dispatch, commit, rootState }, params) {
     const statusParams = JSON.stringify(params)

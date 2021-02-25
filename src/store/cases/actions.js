@@ -32,6 +32,7 @@ export default {
       result.success = !!caseDetails
       commit('SET_CASE_DETAILS', { [caseId]: caseDetails })
       commit('SET_ATTACHMENTS', caseDetails.originals)
+      commit('SET_COMMENTS', caseDetails.comments)
     } catch (e) {
       console.log(e.message)
       commit('SET_NOTIFY', {
