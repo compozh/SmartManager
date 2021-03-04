@@ -10,6 +10,7 @@ export default {
   notify: null,
   helperExec: true,
   activeZone: null,
+  privateKeyIsSaved: false,
 
   // TODO: рассмотреть вариант хранения списка пользователей
   // TODO: в виде объекта с ID в качестве ключей, чтоб не перебирать массив каждый раз

@@ -63,20 +63,20 @@
     </v-tooltip>
 
     <!-- Sing version button -->
-<!--    <v-tooltip top>-->
-<!--      <template #activator="{ on }">-->
-<!--        <v-btn v-on="on"-->
-<!--               @click.stop="$emit('sign')"-->
-<!--               color="warning"-->
-<!--               class="btn-border"-->
-<!--               icon x-small depressed-->
-<!--               :disabled="!signBtnActive">-->
-<!--          <fa-icon icon="file-signature" type="fal"-->
-<!--                   fixed-size="12" style="margin-left: 2px;"/>-->
-<!--        </v-btn>-->
-<!--      </template>-->
-<!--      <span>{{ $t('eds.signVersion') }}</span>-->
-<!--    </v-tooltip>-->
+    <v-tooltip top>
+      <template #activator="{ on }">
+        <v-btn v-on="on"
+               color="pink"
+               class="btn-border"
+               icon x-small depressed
+               :disabled="!signBtnActive"
+               @click.stop="$emit('sign')">
+          <fa-icon icon="file-signature" type="fal"
+                   fixed-size="12" style="margin-left: 2px;"/>
+        </v-btn>
+      </template>
+      <span>{{ $t('eds.signVersion') }}</span>
+    </v-tooltip>
   </div>
 </template>
 

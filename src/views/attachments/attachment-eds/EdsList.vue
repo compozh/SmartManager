@@ -6,23 +6,26 @@
                  :loading="loading"
                  @close="$emit('input', false)">
       <template #text>
+
+        <!-- Signatures table -->
         <v-simple-table v-if="signatures && signatures.length"
                         dense fixed-header height="300px">
           <template>
             <thead>
-            <tr>
-              <th class="text-center">{{ $t('table.status') }}</th>
-              <th class="text-center">{{ $t('table.date') }}</th>
-              <th class="text-center">{{ $t('eds.signatory') }}</th>
-              <th class="text-center">{{ $t('eds.organization') }}</th>
-              <th class="text-center">{{ $t('eds.position') }}</th>
-              <th class="text-center">{{ $t('eds.code') }}</th>
-              <th class="text-center">{{ $t('eds.keyCenter') }}</th>
-              <th class="text-center">{{ $t('eds.comment') }}</th>
-            </tr>
+              <tr>
+                <th class="text-center">{{ $t('table.status') }}</th>
+                <th class="text-center">{{ $t('table.date') }}</th>
+                <th class="text-center">{{ $t('eds.signatory') }}</th>
+                <th class="text-center">{{ $t('eds.organization') }}</th>
+                <th class="text-center">{{ $t('eds.position') }}</th>
+                <th class="text-center">{{ $t('eds.code') }}</th>
+                <th class="text-center">{{ $t('eds.keyCenter') }}</th>
+                <th class="text-center">{{ $t('eds.comment') }}</th>
+              </tr>
             </thead>
+
             <tbody>
-            <tr v-for="(sign, idx) in signatures" :key="idx"
+              <tr v-for="(sign, idx) in signatures" :key="idx"
                 :class="{'lime lighten-5': sign.Id === currentEds.Id}"
                 style="cursor: pointer; width: 100%;"
                 @click="currentEds = sign">
@@ -45,10 +48,17 @@
             </tbody>
           </template>
         </v-simple-table>
+
+        <v-skeleton-loader v-else-if="detailsLoading"
+                           type="table-tbody"
+                           height="180"/>
+
         <div v-else
              class="subtitle-1 font-weight-light grey--text text--lighten-1">
-          {{ $t('eds.noEds') }}</div>
+          {{ $t('eds.noEds') }}
+        </div>
       </template>
+
       <template #actions>
         <outlined-btn x-small
                       color="success"
@@ -56,11 +66,11 @@
                       :handler="showEdsCreateDialog">
           <span>{{ $t('eds.sign') }}</span>
         </outlined-btn>
-        <outlined-btn v-if="isPrivateKey"
+        <outlined-btn v-if="privateKeyIsSaved"
                       x-small
                       color="warning"
                       icon="file-times"
-                      :handler="() => window.ds.resetPrivateKey()">
+                      :handler="resetPrivateKey">
           <span>{{ $t('eds.clearKey') }}</span>
         </outlined-btn>
         <v-spacer/>
@@ -126,6 +136,7 @@ const DeleteConfirm = () => import('@/components/DeleteConfirm')
 export default {
   name: 'EdsList',
   mixins: [eds, date],
+
   filters: {
     capitalize (value) {
       if (!value) { return '' }
@@ -135,14 +146,17 @@ export default {
       return value.split(' ').map(transform).join(' ')
     }
   },
+
   model: {
     prop: 'showEds'
   },
   props: {
+    showEds: Boolean,
     signatures: Array,
     attachmentParams: Object,
-    showEds: Boolean
+    detailsLoading: Boolean
   },
+
   components: {
     DialogCard,
     OutlinedBtn,
@@ -150,6 +164,7 @@ export default {
     EdsDetails,
     DeleteConfirm
   },
+
   data: () => ({
     currentEds: {},
     checkingSigns: null,
@@ -160,6 +175,7 @@ export default {
     showDetails: false,
     loading: false
   }),
+
   computed: {
     checkIconColor () {
       return id => {
@@ -173,6 +189,7 @@ export default {
       }
     }
   },
+
   methods: {
     async checkEds () {
       this.loading = true
@@ -183,10 +200,12 @@ export default {
       this.checkingSigns = null
       this.loading = false
     },
+
     showEdsCreateDialog () {
       this.loading = true
       this.edsCreateDialog = true
     },
+
     async deleteEds () {
       await this.$store.dispatch('deleteSign', {
         attachmentId: this.attachmentParams.fileId,
@@ -196,6 +215,7 @@ export default {
       this.$emit('update:eds', {})
     }
   },
+
   beforeDestroy () {
     this.currentEds = {}
   }

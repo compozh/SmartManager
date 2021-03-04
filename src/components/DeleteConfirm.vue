@@ -1,5 +1,4 @@
 <template>
-  <v-row justify="center">
     <v-dialog :value="dialog"
               @input="$emit('input', $event)"
               persistent max-width="400">
@@ -26,7 +25,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
 </template>
 
 <script>

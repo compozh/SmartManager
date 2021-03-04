@@ -108,11 +108,12 @@
                   <attachment-btns v-if="hover" :objectId="objectId"
                                    :access="attachment.access"
                                    :is-sign="isSign(attachment)"
-                                   :sign-btn-active="isPrivateKey"
+                                   :sign-btn-active="privateKeyIsSaved"
                                    :loading="downLoaders.includes(attachment.id)"
                                    @new-version="newVersion(attachment)"
                                    @download="downloadAttachment(attachment)"
                                    @delete="attachmentDeleteDialog(attachment)"
+                                   @sign="signAttachment(attachment)"
                                    @eds="showEds(attachment)"/>
                 </td>
               </tr>
@@ -147,7 +148,13 @@
     <eds v-if="edsDialog"
          v-model="edsDialog"
          :signatures="attachment.signatures"
-         :attachmentParams="attachmentParams"/>
+         :attachment-params="attachmentParams"
+         :details-loading="attachmentDetailsLoading"/>
+
+    <!-- Create eds dialog -->
+    <eds-create v-if="edsCreateDialog"
+                v-model="edsCreateDialog"
+                :attachment="attachmentParams"/>
   </div>
 </template>
 
@@ -161,6 +168,7 @@ import eds from '@/mixins/eds'
 
 const VersionList = () => import('./VersionList')
 const Eds = () => import('../attachment-eds/EdsList')
+const EdsCreate = () => import('../attachment-eds/eds-create/EdsCreate')
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
 const FilesUpload = () => import('@/views/attachments/attachment-upload/FilesUpload')
 
@@ -180,12 +188,14 @@ export default {
     AttachmentBtns,
     DeleteConfirm,
     FilesUpload,
-    FileTypeIcon
+    FileTypeIcon,
+    EdsCreate
   },
 
   data: () => ({
     attachmentsListMode: false,
     deleteConfirmDialog: false,
+    edsCreateDialog: false,
     deleteDialogType: '',
     deleteParams: {},
     uploadType: 'attachments',
@@ -194,6 +204,7 @@ export default {
     signatures: [],
     attachment: {},
     attachmentParams: {},
+    attachmentDetailsLoading: false,
     edsDialog: false,
     downLoaders: [],
     scrollOptions: {
@@ -227,9 +238,7 @@ export default {
       return handler
     },
 
-    isSign () {
-      return attachment => !!attachment?.signatures?.length
-    }
+    isSign: () => attachment => attachment.isSign || !!attachment?.signatures?.length
   },
 
   created () {
@@ -271,11 +280,26 @@ export default {
       this.deleteParams.fileName = attachment.fileName
     },
 
+    async signAttachment (attachment) {
+      this.edsCreateDialog = true
+      await this.getAttachmentParams(attachment)
+    },
+
     async showEds (attachment) {
       this.edsDialog = true
-      attachment.url || await this.getAttachmentDetails(attachment)
+      await this.getAttachmentParams(attachment)
+    },
+
+    async getAttachmentParams (attachment) {
       this.attachment = attachment
+      // Load attachment details if it needed
+      if (!attachment.hasDetails) {
+        this.attachmentDetailsLoading = true
+        await this.getAttachmentDetails(attachment)
+        this.attachmentDetailsLoading = false
+      }
       this.attachmentParams = {
+        loading: false,
         isVersion: false,
         fileId: attachment.id,
         fileUrl: attachment.url,

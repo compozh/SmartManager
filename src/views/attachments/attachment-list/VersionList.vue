@@ -59,9 +59,10 @@
         <td class="text-center px-2">
           <version-btns :version="version"
                         :access="attachment.access"
-                        :sign-btn-active="isPrivateKey"
+                        :sign-btn-active="privateKeyIsSaved"
                         @set-active="setActiveVersion(attachment.id, version)"
                         @show-notes="showNotes(version)"
+                        @sign="signVersion(version)"
                         @delete="versionDeleteDialog(version)"/>
         </td>
         <td class="text-center">
@@ -85,10 +86,14 @@
       </tr>
       </tbody>
     </template>
+
+    <!-- Notes list -->
     <notes v-model="notesDialog"
            :access="attachment.access"
            :notes="notes"
            :roots="roots"/>
+
+    <!-- Delete version dialog -->
     <delete-confirm v-model="deleteConfirmDialog"
                     @confirm="deleteVersion(attachment, deleteParams.versionId)">
       <template #title>{{ $t('versions.delete') }}</template>
@@ -103,6 +108,11 @@
          v-model="edsDialog"
          :signatures="version.Details.Signatures"
          :attachmentParams="versionParams"/>
+
+    <!-- Create eds dialog -->
+    <eds-create v-if="edsCreateDialog"
+                v-model="edsCreateDialog"
+                :attachment="versionParams"/>
   </v-simple-table>
 </template>
 
@@ -116,6 +126,7 @@ import eds from '@/mixins/eds'
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
 const Notes = () => import('../attachment-notes/Notes')
 const Eds = () => import('../attachment-eds/EdsList')
+const EdsCreate = () => import('../attachment-eds/eds-create/EdsCreate')
 
 export default {
   name: 'VersionList',
@@ -130,7 +141,8 @@ export default {
     DeleteConfirm,
     Notes,
     VersionBtns,
-    Eds
+    Eds,
+    EdsCreate
   },
 
   data: () => ({
@@ -141,7 +153,8 @@ export default {
     version: {},
     versionParams: {},
     notesDialog: false,
-    edsDialog: false
+    edsDialog: false,
+    edsCreateDialog: false
   }),
 
   computed: {
@@ -164,17 +177,24 @@ export default {
       }
     },
 
+    signVersion (version) {
+      this.getVersionParams(version)
+      this.edsCreateDialog = true
+    },
+
     showEds (version) {
+      this.getVersionParams(version)
       this.edsDialog = true
-      if (version.Details) {
-        this.version = version
-        this.versionParams = {
-          isVersion: true,
-          fileId: version.Id,
-          fileUrl: version.Details.FileUrl,
-          fileSize: version.FileSize,
-          fileExt: version.FileExt
-        }
+    },
+
+    getVersionParams (version) {
+      this.version = version
+      this.versionParams = {
+        isVersion: true,
+        fileId: version.Id,
+        fileUrl: version.Details.FileUrl,
+        fileSize: version.FileSize,
+        fileExt: version.FileExt
       }
     }
   }

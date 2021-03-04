@@ -30,10 +30,10 @@
         <v-list-item-title class="body-2">{{ userLogin }}</v-list-item-title>
       </v-list-item>
 
-      <v-list-item v-if="isPrivateKey"
-                   @click="window.ds.resetPrivateKey()">
+      <v-list-item v-if="privateKeyIsSaved"
+                   @click="resetPrivateKey">
         <v-list-item-icon class="mr-2 align-center">
-          <fa-icon icon="at"/>
+          <fa-icon icon="trash"/>
         </v-list-item-icon>
         <v-list-item-title class="body-1" v-text="$t('eds.clearKey')"/>
       </v-list-item>

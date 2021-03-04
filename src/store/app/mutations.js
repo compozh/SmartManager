@@ -40,5 +40,8 @@ export default {
   },
   ADD_USER (state, user) {
     state.users.push(user)
+  },
+  SET_PRIVATE_KEY (state, isSaved) {
+    state.privateKeyIsSaved = isSaved
   }
 }

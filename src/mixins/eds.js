@@ -4,7 +4,6 @@ import { DigitalSignature, Models } from '@it-enterprise/digital-signature'
 export default {
   data: () => ({
     ds: null,
-    isPrivateKey: false,
     keyType: {
       name: 'fileKey',
       value: 0
@@ -25,21 +24,19 @@ export default {
 
   computed: {
     keyParams () {
-      if (this.signatureInfo) {
-        const sign = this.signatureInfo
-        return {
-          fio: sign.subjCN || sign.subjFullName,
-          email: sign.subjEMail,
-          post: sign.subjTitle,
-          organization: sign.subjOrg,
-          city: sign.subjLocality,
-          organizationStateCode: sign.subjEDRPOUCode,
-          userStateCode: sign.subjDRFOCode,
-          keyCenter: sign.issuerCN,
-          keyNumber: sign.serial
-        }
+      const ds = this.ds || window.ds
+      const sign = ds.readedKey.ownerInfo
+      return {
+        fio: sign.subjCN || sign.subjFullName,
+        email: sign.subjEMail,
+        post: sign.subjTitle,
+        organization: sign.subjOrg,
+        city: sign.subjLocality,
+        organizationStateCode: sign.subjEDRPOUCode,
+        userStateCode: sign.subjDRFOCode,
+        keyCenter: sign.issuerCN,
+        keyNumber: sign.serial
       }
-      return null
     },
 
     signParams () {
@@ -61,12 +58,10 @@ export default {
         }
       }
       return null
-    }
-  },
+    },
 
-  async created () {
-    if (window.ds) {
-      this.isPrivateKey = await window.ds.isPrivateKeyReaded()
+    privateKeyIsSaved () {
+      return this.$store.state.app.privateKeyIsSaved
     }
   },
 
@@ -139,11 +134,25 @@ export default {
       this.ds = new DigitalSignature(models)
     },
 
+    async postInitActions () {
+      const preferKeyType = await this.ds.initialise()
+      this.keyType = this.signItems.find(type => type.value === preferKeyType)
+
+      const getCAsResult = await this.ds.getCAs()
+      const issuerCNs = getCAsResult.map(ca => ({ text: ca.issuerCNs[0], value: ca }))
+      const autoDetect = { text: this.$t('eds.autoDetect'), value: null }
+
+      this.issuerCNs = [autoDetect, ...issuerCNs]
+      this.issuerCN = this.issuerCNs[0].value
+    },
+
     async toSign () {
       this.error = null
       this.loading = true
       try {
-        await this.readPrivateKey()
+        if (!this.privateKeyIsSaved) {
+          await this.readPrivateKey()
+        }
 
         if (this.multipleSign) {
           await this.runMultipleSign()
@@ -154,6 +163,7 @@ export default {
 
         this.$emit('input', false)
       } catch (e) {
+        this.resetPrivateKey()
         this.error = e
       }
       this.loading = false
@@ -163,6 +173,11 @@ export default {
       const { JS: fileKey, SW: hardKey } = Models.DigitalSignatureLibraryType
       if (this.keyType.value === fileKey) await this.readFileKey()
       if (this.keyType.value === hardKey) await this.readHardwareKey()
+      // Save key in current session
+      if (this.saveKeyOption === 'saveInSession') {
+        window.ds = this.ds
+        this.$store.commit('SET_PRIVATE_KEY', true)
+      }
     },
 
     readFileKey () {
@@ -213,7 +228,8 @@ export default {
     },
 
     getSign (fileUrl) {
-      return this.ds.signFileEx(fileUrl, false)
+      const ds = this.ds || window.ds
+      return ds.signFileEx(fileUrl, false)
         .then(result => { this.signResult = result })
         .catch(e => { throw Error(e.message) })
     },
@@ -233,8 +249,9 @@ export default {
 
     async reload () {
       this.loading = true
+      this.ds || this.dsInit()
       try {
-        await this.ds.initialise()
+        await this.postInitActions()
         this.initLocalState()
         await this.setLibraryType()
         this.error = null
@@ -243,6 +260,13 @@ export default {
         this.error = e
       }
       this.loading = false
+    },
+
+    resetPrivateKey () {
+      if (window.ds) {
+        window.ds.resetPrivateKey()
+      }
+      this.$store.commit('SET_PRIVATE_KEY', false)
     }
   }
 }

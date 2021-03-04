@@ -16,3 +16,5 @@ Vue.use(formio, {
   options,
   dependencies: { store }
 })
+
+// TODO: dynamic import

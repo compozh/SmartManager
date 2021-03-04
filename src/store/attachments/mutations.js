@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import moment from 'moment'
 
+// TODO: add getAttachmentIndex getter
+
 export default {
   SET_ATTACHMENTS (state, attachments) {
     state.attachments = attachments.map((attachment, idx) => {

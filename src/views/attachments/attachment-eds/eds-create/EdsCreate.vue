@@ -23,7 +23,7 @@
                     hide-details
                     menu-props="offsetY"
                     outlined dense
-                    :disabled="loading"
+                    :disabled="loading || privateKeyIsSaved"
                     class="body-1 mb-8">
             <template #prepend-inner>
               <v-icon small class="pt-1 pr-2">fas fa-key</v-icon>
@@ -37,7 +37,7 @@
                           hide-details
                           class="body-1 mb-8"
                           autocomplete="off"
-                          :disabled="loading"
+                          :disabled="loading || privateKeyIsSaved"
                           :label="$t('eds.serviceProvider')"
                           :placeholder="$t('eds.providerPlaceholder')">
             <template #prepend-inner>
@@ -48,7 +48,7 @@
           <!-- File key -->
           <eds-file-key v-if="keyType.name === 'fileKey'"
                         v-model="fileKey"
-                        :loading="loading"
+                        :loading="loading || privateKeyIsSaved"
                         :password.sync="password"
                         @sign="toSign"/>
 
@@ -56,26 +56,27 @@
           <eds-hardware-key v-if="keyType.name === 'hardwareKey'"
                             v-model="hardwareKey"
                             :key-medias="keyMedias"
-                            :loading="loading"
+                            :loading="loading || privateKeyIsSaved"
                             :password.sync="password"
                             @reload="reload"
                             @sign="toSign"/>
 
           <!-- Save key options -->
-<!--          <v-radio-group v-model="saveKeyOption"-->
-<!--                         hide-details-->
-<!--                         dense class="eds-save">-->
-<!--            <v-radio :label="$t('eds.notSaveKey')"-->
-<!--                     value="notSave"-->
-<!--                     class="align-start mb-4"/>-->
-<!--            <v-radio :label="$t('eds.saveKeyInSession')"-->
-<!--                     value="saveInSession"-->
-<!--                     class="align-start mb-4"/>-->
+          <v-radio-group v-if="!privateKeyIsSaved"
+                         v-model="saveKeyOption"
+                         hide-details
+                         dense class="eds-save">
+            <v-radio :label="$t('eds.notSaveKey')"
+                     value="notSave"
+                     class="align-start mb-4"/>
+            <v-radio :label="$t('eds.saveKeyInSession')"
+                     value="saveInSession"
+                     class="align-start mb-4"/>
 <!--            <v-radio :label="$t('eds.saveKeyInBrowser')"-->
 <!--                     value="saveInBrowser"-->
 <!--                     class="align-start"-->
 <!--                     disabled/>-->
-<!--          </v-radio-group>-->
+          </v-radio-group>
 
           <!-- Error message -->
           <v-alert v-if="error"
@@ -90,8 +91,7 @@
             </div>
 
             <!-- Refresh button -->
-            <outlined-btn v-if="error.code === 3"
-                          x-small
+            <outlined-btn x-small
                           class="mt-4"
                           color="secondary"
                           icon="redo"
@@ -208,22 +208,15 @@ export default {
   },
 
   async mounted () {
+    if (this.privateKeyIsSaved) {
+      this.toSign()
+      return
+    }
+
     this.loading = true
     try {
       this.dsInit()
-      // Save key in current session
-      if (this.saveKeyOption === 'saveInSession') {
-        window.ds = this.ds
-      }
-      const preferKeyType = await this.ds.initialise()
-      this.keyType = this.signItems.find(type => type.value === preferKeyType)
-
-      const getCAsResult = await this.ds.getCAs()
-      const issuerCNs = getCAsResult.map(ca => ({ text: ca.issuerCNs[0], value: ca }))
-      const autoDetect = { text: this.$t('eds.autoDetect'), value: null }
-
-      this.issuerCNs = [autoDetect, ...issuerCNs]
-      this.issuerCN = this.issuerCNs[0].value
+      await this.postInitActions()
     } catch (e) {
       this.error = e
     }
