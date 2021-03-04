@@ -465,11 +465,11 @@ export default {
     },
 
     executeTask (executor) {
-      if (!this.needAttachmentsSign) {
+      if (this.needAttachmentsSign) {
         this.taskExecuteMethod = executor
         this.signAttachmentsDialog = true
       } else {
-        // executor()
+        executor()
       }
     },
 
