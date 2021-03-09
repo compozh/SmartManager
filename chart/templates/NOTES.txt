@@ -1,4 +1,0 @@
-1. Application smartmanager URL:
-https://d-k8s.it.ua/{{ .Release.Name }}
-2. Check app pods for start and running
-kubectl get pods -l release={{ .Release.Name }}
