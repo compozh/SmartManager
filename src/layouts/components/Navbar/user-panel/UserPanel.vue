@@ -5,6 +5,7 @@
           offset-y content-class="white"
           transition="scroll-y-transition">
 
+    <!-- User avatar -->
     <template #activator="{ on }">
       <v-avatar v-on="on"
                 color="primary"
@@ -15,6 +16,7 @@
       </v-avatar>
     </template>
 
+    <!-- User name -->
     <v-list dense nav>
       <v-list-item>
         <v-list-item-icon class="mr-2 align-center">
@@ -23,6 +25,7 @@
         <v-list-item-title class="body-1">{{ userName }}</v-list-item-title>
       </v-list-item>
 
+      <!-- User login -->
       <v-list-item>
         <v-list-item-icon class="mr-2 align-center">
           <fa-icon icon="at"/>
@@ -30,6 +33,7 @@
         <v-list-item-title class="body-2">{{ userLogin }}</v-list-item-title>
       </v-list-item>
 
+      <!-- Reset private key option -->
       <v-list-item v-if="privateKeyIsSaved"
                    @click="resetPrivateKey">
         <v-list-item-icon class="mr-2 align-center">
@@ -40,6 +44,7 @@
 
       <v-divider/>
 
+      <!-- Open delegated users list -->
       <v-list-item v-if="delegatedUsers.length"
                    @click="usersDialog = true"
                    class="mt-1">
@@ -51,6 +56,7 @@
         </v-list-item-title>
       </v-list-item>
 
+      <!-- Open delegated rights list -->
       <v-list-item v-if="delegatedRights.length"
                    @click="rightsDialog = true"
                    class="mt-1">
@@ -62,6 +68,7 @@
         </v-list-item-title>
       </v-list-item>
 
+      <!-- Open delegation rights dialog -->
       <v-list-item @click="delegateDialog = true"
                    class="mt-1">
         <v-list-item-icon class="mr-2 align-center">
@@ -74,6 +81,7 @@
 
       <v-divider/>
 
+      <!-- Logout option -->
       <v-list-item @click="logout"
                    class="mt-1">
         <v-list-item-icon class="mr-2 align-center">
@@ -106,11 +114,13 @@ const DelegateUser = () => import('./DelegateUser')
 export default {
   name: 'UserPanel',
   mixins: [userInfo, userMethods, eds],
+
   components: {
     DelegatedUsers,
     DelegatedRights,
     DelegateUser
   },
+
   data: () => ({
     menu: false,
     usersDialog: false,
@@ -119,7 +129,3 @@ export default {
   })
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,9 +1,12 @@
 <template>
-  <dialog-card :value="showRights" width="700px"
+  <dialog-card :value="showRights"
+               width="700px" persistent
                @close="$emit('input', false)"
                @input="$emit('input', $event)"
-               :title="$t('user.delegatedRights')" persistent>
+               :title="$t('user.delegatedRights')">
     <template #text>
+
+      <!-- Search field -->
       <v-text-field v-model="search"
                     clearable
                     clear-icon="+"
@@ -21,6 +24,8 @@
                    class="mt-2"/>
         </template>
       </v-text-field>
+
+      <!-- Delegated rights table -->
       <v-data-table dense
                     height="400px"
                     fixed-header
@@ -29,6 +34,7 @@
                     :headers="headers"
                     :items="delegatedUsers"
                     :search="search">
+
         <template #item="{ item: rights, index }">
           <tr :class="{'lime lighten-5': selectedRights === rights.USERID }"
               style="cursor: pointer; width: 100%;"
@@ -63,6 +69,8 @@
         </template>
       </v-data-table>
     </template>
+
+    <!-- Apply delegated rights button -->
     <template #actions>
       <v-spacer/>
       <outlined-btn x-small
@@ -84,18 +92,22 @@ import { userInfo, userMethods } from '@/mixins/users'
 export default {
   name: 'DelegatedUsers',
   mixins: [userInfo, userMethods],
+
   model: {
     prop: 'showRights'
   },
   props: ['showRights'],
+
   components: {
     DialogCard,
     OutlinedBtn
   },
+
   data: () => ({
     search: '',
     selectedRights: ''
   }),
+
   computed: {
     headers () {
       return [
@@ -106,6 +118,7 @@ export default {
       ]
     }
   },
+
   beforeDestroy () {
     this.search = ''
   }

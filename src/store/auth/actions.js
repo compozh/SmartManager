@@ -23,6 +23,7 @@ export default {
       commit('STOP_PRELOADER', 'authTypes')
     }
   },
+
   logout ({ commit }) {
     auth.clearTokens()
     commit('UPDATE_AUTHENTICATED_USER', null)
@@ -30,6 +31,7 @@ export default {
       router.push({ path: '/login' })
     }
   },
+
   async login ({ commit, dispatch }, { login, password, rememberMe }) {
     const userIsLoggedIn = await dispatch('userIsLoggedIn')
     if (userIsLoggedIn) {
@@ -52,6 +54,7 @@ export default {
       commit('STOP_PRELOADER', 'login')
     }
   },
+
   async smartId ({ commit }) {
     try {
       await auth.loginByOidc({ lang: languageTag() })
@@ -65,6 +68,7 @@ export default {
       })
     }
   },
+
   async applyDelegatedRights ({ commit }, userId) {
     try {
       commit('START_PRELOADER', 'applyDelegatedRights')
@@ -73,7 +77,7 @@ export default {
         if (router.currentRoute.name !== 'task-list') {
           await router.push('/')
         }
-        window.location.reload()
+        // window.location.reload()
       } else {
         commit('STOP_PRELOADER', 'applyDelegatedRights')
         commit('SET_NOTIFY', {
@@ -93,6 +97,7 @@ export default {
       commit('STOP_PRELOADER', 'applyDelegatedRights')
     }
   },
+
   async addDelegateUser ({ dispatch, commit }, params) {
     try {
       commit('START_PRELOADER', 'addDelegateUser')
@@ -124,6 +129,7 @@ export default {
       commit('STOP_PRELOADER', 'addDelegateUser')
     }
   },
+
   async editDelegatedRights ({ dispatch, commit }, params) {
     try {
       commit('START_PRELOADER', 'editDelegatedRights')
@@ -151,6 +157,7 @@ export default {
       commit('STOP_PRELOADER', 'editDelegatedRights')
     }
   },
+
   userIsLoggedIn ({ state, commit }) {
     // If user is already logged in notify and exit
     if (state.user) {
@@ -163,6 +170,7 @@ export default {
     }
     return false
   },
+
   async updateAuthenticatedUser ({ state, commit, dispatch }, result) {
     if (result.success) {
       await dispatch('setUserData')
@@ -179,6 +187,7 @@ export default {
       }
     }
   },
+
   async setUserData ({ commit }) {
     const user = auth.getUserData()
     user.delegatedUsers = await auth.getDelegatedUsers(user.id) || []
