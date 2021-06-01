@@ -1,0 +1,17 @@
+{
+    smtasks {
+        cases {
+            id
+            name
+            purpose
+            dateFrom
+            dateTo
+            fioAdd
+            dateAdd
+            hasOrig
+            hasComm
+            folderId
+            status
+        }
+    }
+}

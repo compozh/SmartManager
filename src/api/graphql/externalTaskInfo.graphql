@@ -1,0 +1,9 @@
+query ($externalId: String) {
+    workFlowQuery {
+        externalTaskInfo(externalId: $externalId) {
+            currentActivity
+            history
+            processXml
+        }
+    }
+}

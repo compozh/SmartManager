@@ -1,0 +1,7 @@
+mutation ($caseId: Int!, $taskId: Int!, $bind: Boolean!) {
+    smtasksMutation {
+        binding(caseId: $caseId, taskId: $taskId, bind: $bind) {
+            success
+        }
+    }
+}

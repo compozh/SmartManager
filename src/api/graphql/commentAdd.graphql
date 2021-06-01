@@ -1,0 +1,8 @@
+mutation ($comment: String, $params: String) {
+    smtasksMutation {
+        addComment(comment: $comment, params: $params) {
+            success,
+            errorMessage
+        }
+    }
+}

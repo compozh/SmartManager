@@ -1,0 +1,7 @@
+mutation ($taskId: Int!, $pin: Boolean!) {
+    smtasksMutation {
+        taskPin(taskId: $taskId, pin: $pin) {
+            success
+        }
+    }
+}

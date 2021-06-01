@@ -1,0 +1,68 @@
+.layout--full-page {
+  background: url("../images/full-page-bg.svg") center bottom/cover no-repeat;
+}
+
+.header--full-page {
+  position: fixed;
+}
+
+.btn-smart-id {
+  background: url("../images/smart_id_btn_bg.png") no-repeat center center #e6e6e6;
+  background-size: 85%;
+  border-radius: 4px;
+  height: 36px;
+  width: 76px;
+  margin-right: 0.75rem;
+  cursor: pointer;
+
+  &:hover {
+    opacity: .9;
+  }
+}
+
+.clearable .v-input__append-inner {
+  margin-top: 6px !important;
+}
+
+.btns-container {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  height: 100%;
+}
+
+.btn-border {
+  border: 1px dashed;
+}
+
+.v-btn.v-btn--disabled.no-active-btn {
+  color: #bbbbbb !important;
+}
+
+.eds-save {
+  label {
+    font-size: 14px !important;
+    white-space: pre-line;
+  }
+}
+
+.comment-input {
+  border-top: 1px solid !important;;
+  border-bottom-left-radius: 5px !important;;
+  border-bottom-right-radius: 5px !important;;
+
+  &.white {
+    border-color: #e5e5e5 !important;
+  }
+}
+
+.comment-msg {
+  position: relative !important;;
+  max-width: 70% !important;;
+  background: white !important;;
+}
+
+.border-light {
+  border: 1px solid #e5e5e5 !important;;
+  border-radius: 5px !important;;
+}

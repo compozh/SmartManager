@@ -1,0 +1,8 @@
+mutation ($versionId: Int!, $noteText: String!) {
+    smtasksMutation {
+        addNote(versionId: $versionId, noteText: $noteText) {
+            success,
+            errorMessage
+        }
+    }
+}

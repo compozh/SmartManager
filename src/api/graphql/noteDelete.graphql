@@ -1,0 +1,8 @@
+mutation ($noteId: String!) {
+    smtasksMutation {
+        deleteNote(noteId: $noteId) {
+            success,
+            errorMessage
+        }
+    }
+}

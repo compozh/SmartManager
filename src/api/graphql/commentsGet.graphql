@@ -1,0 +1,11 @@
+query ($type: String!, $id: Int!) {
+    smtasks {
+        comments(type: $type, id: $id) {
+            date
+            text
+            user
+            userId
+            userPhoto
+        }
+    }
+}

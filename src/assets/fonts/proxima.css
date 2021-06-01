@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 400;
+  font-style: normal;
+  src: url('ProximaNova-Reg.woff') format('woff'),
+       url('ProximaNova-Reg.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 400;
+  font-style: italic;
+  src: url('ProximaNova-RegIt.woff') format('woff'),
+       url('ProximaNova-RegIt.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 100;
+  font-style: normal;
+  src: url('ProximaNova-Light.woff') format('woff'),
+       url('ProximaNova-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 100;
+  font-style: italic;
+  src: url('ProximaNova-LightIt.woff') format('woff'),
+       url('ProximaNova-LightIt.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 700;
+  font-style: normal;
+  src: url('ProximaNova-Bold.woff') format('woff'),
+       url('ProximaNova-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 700;
+  font-style: italic;
+  src: url('ProximaNova-BoldIt.woff') format('woff'),
+       url('ProximaNova-BoldIt.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 800;
+  font-style: normal;
+  src: url('ProximaNova-Xbold.woff') format('woff'),
+       url('ProximaNova-Xbold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: 900;
+  font-style: normal;
+  src: url('ProximaNova-Black.woff') format('woff'),
+       url('ProximaNova-Black.otf') format('opentype');
+}
+
+div#app.v-application,
+div#app.v-application .display-4,
+div#app.v-application .display-3,
+div#app.v-application .display-2,
+div#app.v-application .display-1,
+div#app.v-application .headline,
+div#app.v-application .title,
+div#app.v-application .subtitle-1,
+div#app.v-application .subtitle-2,
+div#app.v-application .body-1,
+div#app.v-application .body-2,
+div#app.v-application .caption,
+div#app.v-application .overline {
+  font-family: 'Proxima Nova', sans-serif !important;
+  color: #4a4a4a;
+}

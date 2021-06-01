@@ -1,0 +1,5 @@
+query ($id: Int!, $params: String) {
+    smtasks {
+        beforeSign(id: $id, params: $params)
+    }
+}

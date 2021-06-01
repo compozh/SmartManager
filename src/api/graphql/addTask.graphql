@@ -1,0 +1,11 @@
+mutation ($newTask: String) {
+  smtasksMutation {
+    addTask(newTask: $newTask) {
+      id
+      success
+      successMessage
+      errorCode
+      errorMessage
+    }
+  }
+}

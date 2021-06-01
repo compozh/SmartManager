@@ -1,0 +1,8 @@
+mutation ($id: Int!) {
+    smtasksMutation {
+        deleteVersion(id: $id) {
+            success
+            errorMessage
+        }
+    }
+}

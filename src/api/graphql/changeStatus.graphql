@@ -1,0 +1,8 @@
+mutation ($statusParams: String) {
+  smtasksMutation {
+    changeStatus(statusParams: $statusParams) {
+      success,
+      errorMessage
+    }
+  }
+}

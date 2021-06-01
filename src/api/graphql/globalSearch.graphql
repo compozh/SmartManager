@@ -1,0 +1,12 @@
+query ($searchText: String!) {
+    smtasks {
+        globalSearchResult(searchText: $searchText) {
+            arso
+            keyValue
+            kidCopy
+            name
+            hasOrig
+            hasComm
+        }
+    }
+}

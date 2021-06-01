@@ -1,0 +1,23 @@
+query($processDefinitionId: String!) {
+    processesQuery {
+        getForm(processDefinitionId: $processDefinitionId) {
+            formKey
+            form {
+                formCode
+                name
+                components
+                submission
+                display
+                settings
+                success
+                errorMessage
+                successMessage
+                errorCode
+            }
+            success
+            errorMessage
+            errorCode
+            statusCode
+        }
+    }
+}

@@ -1,0 +1,5 @@
+query ($params: String) {
+    workFlowQuery {
+        escalationCreate(taskParams: $params)
+    }
+}

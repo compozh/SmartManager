@@ -1,0 +1,103 @@
+query ($taskId: Int) {
+    smtasks {
+        taskDetails(taskId: $taskId) {
+            ...mainTaskFields
+            ...detailTaskFields
+            parentTask {
+                ...mainTaskFields
+            }
+            childTasks {
+                ...mainTaskFields
+            }
+        }
+    }
+}
+
+fragment mainTaskFields on Task {
+    id
+    name
+    descript
+    addedFio
+    addedPhoto
+    dateplan
+    status
+    isMy
+    myControl
+    isGenerate
+    hasOrig
+    hasComm
+    priority
+    dateFact
+    isRead
+    caseId
+    isFavorite
+    docCaption
+    externalParams
+}
+
+fragment detailTaskFields on Task {
+    performerId
+    performer
+    performerPhoto
+    htmlDescript
+    declarer
+    declarerId
+    dateAdd
+    dateFact
+    docTextHtml
+    arso
+    keyValue
+    kidCopy
+    nextButtonText
+    previousButtonText
+    type
+    taskType
+    caseId
+    participants {
+        userId
+        userFio
+        name
+        role
+    }
+    originals {
+        id
+        ndor
+        fileName
+        user
+        date
+        isMy
+        fileExt
+        comm
+        fileSize
+        type
+        typeName
+        typeDescription
+        isSign
+        hash
+        editDate
+        businessObjectDefinitionCode
+        businessObjectKey
+        businessObjectKeyType
+        access {
+            download
+            changeActiveVersion
+            editFile
+            editNewVersion
+            deleteVersion
+            annotationsEdit
+            commentsEdit
+            delete
+            remarksView
+            remarksAdd
+            othersRemarksEdit
+            othersRemarksDelete
+        }
+    }
+    comments {
+        userId
+        user
+        userPhoto
+        date
+        text
+    }
+}
